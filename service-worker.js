@@ -1,0 +1,1 @@
+importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");importScripts("precache-manifest.js");workbox.core.setCacheNameDetails({prefix:"vfcaquacontrol"});self.__precacheManifest=[].concat(self.__precacheManifest||[]);workbox.precaching.suppressWarnings();workbox.precaching.precacheAndRoute(self.__precacheManifest,{});
