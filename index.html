@@ -1,1 +1,126 @@
-<!DOCTYPE html><html lang="pt-br"><head><meta charset=utf-8><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name=description content='Vfc ESP8266 IoT Aquarium Controller'><meta name=format-detection content='telephone=no'><meta name=msapplication-tap-highlight content=no><meta name=viewport content='initial-scale=1,maximum-scale=5,minimum-scale=1,width=device-width'><link rel=manifest href=manifest.json><link rel=icon type=image/x-icon href=statics/icons/icon128.png><link rel=icon type=image/png sizes=32x32 href=statics/icons/favicon32.png><link rel=icon type=image/png sizes=16x16 href=statics/icons/favicon16.png><link rel="shortcut icon" href="statics/icons/favicon16.png"><meta name=theme-color content=#027be3><meta name=apple-mobile-web-app-capable content=yes><meta name=apple-mobile-web-app-status-bar-style content=#ffffff><meta name=apple-mobile-web-app-title content='Vfc AquaControl'><link rel=apple-touch-icon href=statics/icons/icon180.png><meta name=msapplication-TileImage content=statics/icons/icon192.png><meta name=msapplication-TileColor content=#ffffff><title>Vfc AquaControl</title> <script src="https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js"></script> <script>"use strict";"serviceWorker"in navigator&&window.addEventListener("load",function(){navigator.serviceWorker.register("service-worker.js").then(function(t){t.onupdatefound=function(){var e=t.installing;e.onstatechange=function(){switch(e.state){case"installed":navigator.serviceWorker.controller?console.log("New or updated content is available."):console.log("Content is now available offline!");}}}}).catch(function(t){console.error("Error during service worker registration:",t);})});</script> <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script> <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><link crossorigin="anonymous" href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><link rel="stylesheet" href="css/demo.css"><link rel="stylesheet" href="css/style.css"><style>.material-icons{font-family:'Material Icons';font-weight:normal;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-moz-osx-font-smoothing:grayscale}</style></head><body><div class="main-container__section"><div class="panel-group material-tabs-group"><ul class="nav nav-tabs material-tabs material-tabs_primary"><li class="active"><a href="#home1" class="material-tabs__tab-link" data-toggle="tab"> <i class="large material-icons">home</i> </a></li><li><a href="#config1" class="material-tabs__tab-link" data-toggle="tab"> <i class="large material-icons">settings</i> </a></li><li><a href="#logs1" class="material-tabs__tab-link" data-toggle="tab"> <i class="large material-icons">list</i> </a></li></ul><div class="tab-content materail-tabs-content"><div class="tab-pane fade active in" id="home1"><h3 class="h-pad-10">Vfc AquaControl</h3><div><div class="panel-group material-accordion material-accordion_primary" id="accordion"><div class="panel panel-default material-accordion__panel"><div class="panel-heading material-accordion__heading" id="acc_headingOne"><h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion" href="#acc_collapseOne" class="material-accordion__title">Aquário #1</a></h4></div><div id="acc_collapseOne" class="panel-collapse collapse in material-accordion__collapse"><div class="panel-body"><p>Aquário: 10 litros</p><div class="form-group materail-input-block materail-input-block_warning"> <label class="aria-label" for="a1_temp">Temperatura (⁰C):</label> <input id="a1_temp" class="form-control materail-input" type="text" placeholder="Temperatura" readonly="readonly" > <span class="materail-input-block__line"></span></div><div class="main-container__column material-checkbox-group material-checkbox-group_primary"> <input type="checkbox" id="a1_luz" name="checkbox" class="material-checkbox" value="on"> <label class="material-checkbox-group__label" for="a1_luz">Luz (Ligar/Desligar)</label></div><br><div class="form-group materail-input-block materail-input-block_warning"> <label class="aria-label" for="a1_msg">Conexão Servidor:</label> <input id="a1_msg" class="form-control materail-input text-danger" type="text" placeholder="conexão servidor" readonly="readonly" > <span class="materail-input-block__line"></span></div></div></div></div><div class="panel panel-default material-accordion__panel"><div class="panel-heading material-accordion__heading" id="acc_headingTwo"><h4 class="panel-title"> <a class="material-accordion__title" data-toggle="collapse" data-parent="#accordion" href="#acc_collapseTwo">Aquário #2</a></h4></div><div id="acc_collapseTwo" class="panel-collapse collapse material-accordion__collapse"><div class="panel-body"><p>Aquário: 2 litros</p><div class="form-group materail-input-block materail-input-block_warning"> <label class="aria-label" for="a2_temp">Temperatura (⁰C):</label> <input id="a2_temp" class="form-control materail-input" type="text" placeholder="Temperatura" readonly="readonly" > <span class="materail-input-block__line"></span></div><div class="main-container__column material-checkbox-group material-checkbox-group_primary"> <input type="checkbox" id="a2_luz" name="checkbox" class="material-checkbox"> <label class="material-checkbox-group__label" for="a2_luz">Luz (Ligar/Desligar)</label></div> <br><div class="form-group materail-input-block materail-input-block_warning"> <label class="aria-label" for="a2_msg">Conexão Servidor:</label> <input id="a2_msg" class="form-control materail-input text-danger" type="text" placeholder="conexão servidor" readonly="readonly" > <span class="materail-input-block__line"></span></div></div></div></div></div></div></div><div class="tab-pane fade" id="config1"><div class="main-container__section"> <button class="btn material-btn material-btn_primary main-container__column" onclick="mqtt_Reconnect()">Reconectar</button></div></div><div class="tab-pane fade" id="logs1"><div id="divlogs"></div></div></div></div></div><div id="messages"></div> <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js"></script> <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>  </body></html>
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+	<meta charset=utf-8>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name=description content='Vfc ESP8266 IoT Aquarium Controller'>
+	<meta name=format-detection content='telephone=no'>
+	<meta name=msapplication-tap-highlight content=no>
+	<meta name=viewport content='initial-scale=1,maximum-scale=5,minimum-scale=1,width=device-width'>
+	<link rel=manifest href=manifest.json>
+	<link rel=icon type=image/x-icon href=statics/icons/icon128.png>
+	<link rel=icon type=image/png sizes=32x32 href=statics/icons/favicon32.png>
+	<link rel=icon type=image/png sizes=16x16 href=statics/icons/favicon16.png>
+	<link rel="shortcut icon" href="statics/icons/favicon16.png">
+	<meta name=theme-color content=#027be3>
+	<meta name=apple-mobile-web-app-capable content=yes>
+	<meta name=apple-mobile-web-app-status-bar-style content=#ffffff>
+	<meta name=apple-mobile-web-app-title content='Vfc AquaControl'>
+	<link rel=apple-touch-icon href=statics/icons/icon180.png>
+	<meta name=msapplication-TileImage content=statics/icons/icon192.png>
+	<meta name=msapplication-TileColor content=#ffffff>
+	<title>Vfc AquaControl</title>
+	<script src="https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js"></script>
+	<script>
+		"use strict";"serviceWorker"in navigator&&window.addEventListener("load",function(){navigator.serviceWorker.register("service-worker.js").then(function(t){t.onupdatefound=function(){var e=t.installing;e.onstatechange=function(){switch(e.state){case"installed":navigator.serviceWorker.controller?console.log("New or updated content is available."):console.log("Content is now available offline!");}}}}).catch(function(t){console.error("Error during service worker registration:",t);})});
+	</script>
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link crossorigin="anonymous" href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="css/demo.css">
+	<link rel="stylesheet" href="css/style.css">
+	<style>
+		.material-icons{font-family:'Material Icons';font-weight:normal;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-moz-osx-font-smoothing:grayscale}
+	</style>
+</head>
+
+<body>
+	<div class="main-container__section">
+		<div class="panel-group material-tabs-group">
+			<ul class="nav nav-tabs material-tabs material-tabs_primary">
+				<li class="active">
+					<a href="#home1" class="material-tabs__tab-link" data-toggle="tab"> <i class="large material-icons">home</i> 
+					</a>
+				</li>
+				<li>
+					<a href="#config1" class="material-tabs__tab-link" data-toggle="tab"> <i class="large material-icons">settings</i> 
+					</a>
+				</li>
+				<li>
+					<a href="#logs1" class="material-tabs__tab-link" data-toggle="tab"> <i class="large material-icons">list</i> 
+					</a>
+				</li>
+			</ul>
+			<div class="tab-content materail-tabs-content">
+				<div class="tab-pane fade active in" id="home1">
+					<h3 class="h-pad-10">Vfc AquaControl</h3>
+					<div>
+						<div class="panel-group material-accordion material-accordion_primary" id="accordion">
+							<div class="panel panel-default material-accordion__panel">
+								<div class="panel-heading material-accordion__heading" id="acc_headingOne">
+									<h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion" href="#acc_collapseOne" class="material-accordion__title">Aquário #1</a></h4>
+								</div>
+								<div id="acc_collapseOne" class="panel-collapse collapse in material-accordion__collapse">
+									<div class="panel-body">
+										<p>Aquário: 10 litros</p>
+										<div class="form-group materail-input-block materail-input-block_warning">
+											<label class="aria-label" for="a1_temp">Temperatura (⁰C):</label>
+											<input id="a1_temp" class="form-control materail-input" type="text" placeholder="Temperatura" readonly="readonly"> <span class="materail-input-block__line"></span>
+										</div>
+										<div class="main-container__column material-checkbox-group material-checkbox-group_primary">
+											<input type="checkbox" id="a1_luz" name="checkbox" class="material-checkbox" value="on">
+											<label class="material-checkbox-group__label" for="a1_luz">Luz (Ligar/Desligar)</label>
+										</div>
+										<br>
+										<div class="form-group materail-input-block materail-input-block_warning">
+											<label class="aria-label" for="a1_msg">Conexão Servidor:</label>
+											<input id="a1_msg" class="form-control materail-input text-danger" type="text" placeholder="conexão servidor" readonly="readonly"> <span class="materail-input-block__line"></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default material-accordion__panel">
+								<div class="panel-heading material-accordion__heading" id="acc_headingTwo">
+									<h4 class="panel-title"> <a class="material-accordion__title" data-toggle="collapse" data-parent="#accordion" href="#acc_collapseTwo">Aquário #2</a></h4>
+								</div>
+								<div id="acc_collapseTwo" class="panel-collapse collapse material-accordion__collapse">
+									<div class="panel-body">
+										<p>Aquário: 2 litros</p>
+										<div class="form-group materail-input-block materail-input-block_warning">
+											<label class="aria-label" for="a2_temp">Temperatura (⁰C):</label>
+											<input id="a2_temp" class="form-control materail-input" type="text" placeholder="Temperatura" readonly="readonly"> <span class="materail-input-block__line"></span>
+										</div>
+										<div class="main-container__column material-checkbox-group material-checkbox-group_primary">
+											<input type="checkbox" id="a2_luz" name="checkbox" class="material-checkbox">
+											<label class="material-checkbox-group__label" for="a2_luz">Luz (Ligar/Desligar)</label>
+										</div>
+										<br>
+										<div class="form-group materail-input-block materail-input-block_warning">
+											<label class="aria-label" for="a2_msg">Conexão Servidor:</label>
+											<input id="a2_msg" class="form-control materail-input text-danger" type="text" placeholder="conexão servidor" readonly="readonly"> <span class="materail-input-block__line"></span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane fade" id="config1">
+					<div class="main-container__section">
+						<button class="btn material-btn material-btn_primary main-container__column" onclick="mqtt_Reconnect()">Reconectar</button>
+					</div>
+				</div>
+				<div class="tab-pane fade" id="logs1">
+					<div id="divlogs"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="messages"></div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="http://192.168.0.190/script.js"></script>
+</body>
+
+</html>
